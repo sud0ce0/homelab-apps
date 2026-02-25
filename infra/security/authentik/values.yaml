@@ -1,0 +1,73 @@
+global:
+  podAnnotations:
+    vault.hashicorp.com/agent-inject: "true"
+    vault.hashicorp.com/tls-secret: "selfsigned-cert-tls"
+    vault.hashicorp.com/ca-cert: "/vault/tls/ca.crt"
+    vault.hashicorp.com/role: "authentik"
+    vault.hashicorp.com/agent-inject-secret-secret_key.txt: 'kv/data/infra/security/authentik/secret_key'
+    vault.hashicorp.com/agent-inject-template-secret_key.txt: |
+      {{- with secret "kv/data/infra/security/authentik/secret_key" -}}
+      {{ .Data.data.key }}
+      {{- end -}}
+    vault.hashicorp.com/agent-inject-secret-db_password.txt: 'kv/data/infra/security/authentik/db_creds'
+    vault.hashicorp.com/agent-inject-template-db_password.txt: |
+      {{- with secret "kv/data/infra/security/authentik/db_creds" -}}
+      {{ .Data.data.password }}
+      {{- end -}}
+    vault.hashicorp.com/agent-inject-secret-smtp_creds.txt: 'kv/data/infra/security/authentik/smtp_creds'
+    vault.hashicorp.com/agent-inject-template-smtp_username.txt: |
+      {{- with secret "kv/data/infra/security/authentik/smtp_creds" -}}
+      {{ .Data.data.username }}
+      {{- end -}}
+    vault.hashicorp.com/agent-inject-template-smtp_password.txt: |
+      {{- with secret "kv/data/infra/security/authentik/smtp_creds" -}}
+      {{ .Data.data.password }}
+      {{- end -}}
+authentik:
+  secret_key: file:///vault/secrets/secret_key.txt
+  postgresql:
+    host: "authentik-db-rw.authentik.svc.cluster.local"
+    password: file:///vault/secrets/db_password.txt
+  email:
+    host: "smtp.mail.me.com"
+    username: file:///vault/secrets/smtp_username.txt
+    password: file:///vault/secrets/smtp_password.txt
+    use_tls: true
+    from: "Authentik <authentik@sudoceo.com>"
+
+postgresql:
+  enabled: false
+
+server:
+  serviceAccountName: authentik
+  containerSecurityContext:
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "500m"
+      memory: "1024Mi"
+
+worker:
+  serviceAccountName: authentik
+  containerSecurityContext:
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "500m"
+      memory: "1024Mi"

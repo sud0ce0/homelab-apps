@@ -1,0 +1,14 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: cloudflare-api-token
+  namespace: cert-manager
+spec:
+  type: kv-v2
+  mount: kv
+  path: infra/controllers/cert-manager/cloudflare-api-token
+  destination:
+    name: cloudflare-api-token
+    create: true
+  refreshAfter: 30s
+  vaultAuthRef: cert-manager-auth

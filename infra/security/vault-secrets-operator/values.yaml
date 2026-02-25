@@ -1,0 +1,7 @@
+controller:
+  annotations: {}
+defaultVaultConnection:
+   enabled: true
+   address: "https://vault.vault-system.svc:8200"
+   caCertSecret: "selfsigned-cert-tls"
+   skipTLSVerify: false

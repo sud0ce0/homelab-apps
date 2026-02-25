@@ -1,0 +1,5 @@
+defaultSettings:
+  defaultDataPath: /var/mnt/longhorn/
+metrics:
+  serviceMonitor:
+    enabled: true

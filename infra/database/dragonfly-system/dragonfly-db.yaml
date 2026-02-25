@@ -1,0 +1,14 @@
+apiVersion: dragonflydb.io/v1alpha1
+kind: Dragonfly
+metadata:
+  name: dragonfly-db
+  namespace: dragonfly-system
+spec:
+  replicas: 3
+  resources:
+    requests:
+      cpu: "100"
+      memory: "64Mi"
+    limits:
+      cpu: "200"
+      memory: "512Mi"

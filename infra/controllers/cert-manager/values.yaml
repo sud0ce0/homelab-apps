@@ -1,0 +1,38 @@
+crds:
+  enabled: true
+  keep: true
+extraArgs:
+  - "--enable-gateway-api"
+
+serviceAccount:
+  create: true
+  name: cert-manager
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 10m
+    memory: 64Mi
+webhook:
+  resources:
+    limits:
+      cpu: 100m
+      memory: 64Mi
+    requests:
+      cpu: 10m
+      memory: 32Mi
+cainjector:
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 10m
+      memory: 64Mi
+
+prometheus:
+  enabled: true
+  servicemonitor:
+    enabled: true

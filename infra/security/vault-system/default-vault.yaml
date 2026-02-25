@@ -1,0 +1,83 @@
+apiVersion: "vault.banzaicloud.com/v1alpha1"
+kind: "Vault"
+metadata:
+  name: "vault"
+  namespace: "vault-system"
+  labels:
+    app.kubernetes.io/name: vault
+    vault_cr: vault
+spec:
+  size: 3
+  image: hashicorp/vault:1.21.2
+
+  serviceAccount: vault
+
+  serviceType: ClusterIP
+  servicePorts:
+    api-port: 8200
+    cluster-port: 8201
+    vault-ui: 8080
+
+  volumeClaimTemplates:
+    - metadata:
+        name: vault-raft
+      spec:
+        storageClassName: "longhorn"
+        accessModes:
+          - ReadWriteOnce
+        volumeMode: Filesystem
+        resources:
+          requests:
+            storage: 1Gi
+
+  volumeMounts:
+    - name: vault-raft
+      mountPath: /vault/file
+
+  # Add Velero fsfreeze sidecar container and supporting hook annotations to Vault Pods:
+  # https://velero.io/docs/v1.2.0/hooks/
+  veleroEnabled: false
+
+  existingTlsSecretName: selfsigned-cert-tls
+
+  caNamespaces:
+    - "vault-agent-injector"
+    - "vault-secrets-operator"
+    - "authentik"
+    - "cloudflared"
+
+  config:
+    storage:
+      raft:
+        path: "/vault/file"
+    listener:
+      - tcp:
+          address: "0.0.0.0:8200"
+          tls_cert_file: /vault/tls/server.crt
+          tls_key_file: /vault/tls/server.key
+      - tcp:
+          address: "0.0.0.0:8080"
+          tls_disable: true
+    api_addr: https://vault.vault-system:8200
+    cluster_addr: "https://${.Env.POD_NAME}:8201"
+    ui: true
+    disable_mlock: true
+
+  statsdDisabled: true
+
+  serviceRegistrationEnabled: true
+
+  vaultContainerSpec:
+    securityContext:
+      capabilities:
+        add: ["IPC_LOCK"]
+
+
+  resources:
+    vault:
+      requests:
+        memory: "256Mi"
+        cpu: "100m"
+      limits:
+        memory: "512Mi"
+        cpu: "200m"

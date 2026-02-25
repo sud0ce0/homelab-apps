@@ -1,0 +1,5 @@
+# Downloaded charts
+**/charts/**
+
+# macOS specific files
+.DS_Store

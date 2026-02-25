@@ -1,0 +1,14 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: gf-oauth-client-data
+  namespace: prometheus-stack
+spec:
+  type: kv-v2
+  mount: kv
+  path: infra/monitoring/grafana/oauth
+  destination:
+    name: gf-oauth-client-data
+    create: true
+  refreshAfter: 30s
+  vaultAuthRef: grafana-auth

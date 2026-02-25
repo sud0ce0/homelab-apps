@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: authentik
+
+resources:
+  - ns.yaml
+  - database.yaml
+  - rbac.yaml
+  - http-route.yaml
+  - vault-auth.yaml
+  - static-secret.yaml
+
+helmCharts:
+  - name: authentik
+    repo: https://charts.goauthentik.io/
+    releaseName: authentik
+    namespace: authentik
+    version: "2025.12.4"
+    valuesFile: values.yaml

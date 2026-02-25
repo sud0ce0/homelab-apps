@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: vault-cert
+  namespace: vault-system
+spec:
+  commonName: vault
+  usages:
+    - server auth
+  dnsNames:
+    - vault
+    - vault.vault-system
+    - vault.vault-system.svc
+    - vault.vault-system.svc.cluster.local
+  ipAddresses:
+    - 127.0.0.1
+  secretName: selfsigned-cert-tls
+  issuerRef:
+    name: selfsigned-cluster-issuer
+    kind: ClusterIssuer

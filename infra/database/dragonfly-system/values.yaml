@@ -1,0 +1,29 @@
+crds:
+  install: true
+  keep: false
+
+rbacProxy:
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault
+
+
+manager:
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 1000m
+      memory: 256Mi
+
+serviceMonitor:
+  enabled: true
+  interval: 15s
+
+grafanaDashboard:
+  enabled: true
+  folder: "dragonfly"

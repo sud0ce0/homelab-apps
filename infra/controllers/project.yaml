@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: controllers
+  namespace: argocd
+spec:
+  sourceRepos:
+    - "https://github.com/sud0ce0/homelab-apps.git"
+  destinations:
+    - namespace: "argocd"
+      server: "*"
+    - namespace: "kube-system"
+      server: "*"
+    - namespace: "cert-manager"
+      server: "*"
+    - namespace: "trust-manager"
+      server: "*"
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"

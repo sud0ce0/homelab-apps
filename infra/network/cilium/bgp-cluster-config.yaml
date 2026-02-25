@@ -1,0 +1,17 @@
+apiVersion: cilium.io/v2
+kind: CiliumBGPClusterConfig
+metadata:
+  name: cilium-bgp-cluster
+spec:
+  nodeSelector:
+    matchLabels:
+      bgp-node: "true"
+  bgpInstances:
+    - name: "instance-65002"
+      localASN: 65002
+      peers:
+        - name: "openwrt-router"
+          peerASN: 65100
+          peerAddress: "10.10.110.254"
+          peerConfigRef:
+            name: "cilium-bgp-peer"

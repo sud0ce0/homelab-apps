@@ -1,0 +1,13 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultAuth
+metadata:
+  name: grafana-auth
+  namespace: prometheus-stack
+spec:
+  method: kubernetes
+  mount: kubernetes
+  kubernetes:
+    role: grafana
+    serviceAccount: kube-prometheus-stack-grafana
+    audiences:
+      - vault

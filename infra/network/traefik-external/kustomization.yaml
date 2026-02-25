@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ns.yaml
+  - gateway-cert.yaml
+
+helmCharts:
+  - name: traefik
+    repo: https://traefik.github.io/charts
+    version: 39.0.2
+    releaseName: traefik-external
+    namespace: traefik-external
+    valuesFile: values.yaml
+    apiVersions:
+      - monitoring.coreos.com/v1

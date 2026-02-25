@@ -1,0 +1,24 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: authentik-db
+  namespace: authentik
+spec:
+  instances: 3
+  bootstrap:
+    initdb:
+      database: authentik
+      owner: authentik
+      secret:
+        name: authentik-db-creds
+  postgresql:
+    parameters:
+      wal_level: 'replica'
+      fsync: 'on'
+      log_connections: 'false'
+      log_disconnections: 'false'
+      log_hostname: 'false'
+      client_min_messages: 'error'
+      max_connections: '500'
+  storage:
+    size: 10Gi

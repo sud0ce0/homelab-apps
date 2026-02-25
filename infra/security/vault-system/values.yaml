@@ -1,0 +1,14 @@
+# CRDs
+crds:
+  install: true
+  upgradeJob:
+    enabled: true
+
+securityContext:
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  runAsNonRoot: true
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+      type: RuntimeDefault

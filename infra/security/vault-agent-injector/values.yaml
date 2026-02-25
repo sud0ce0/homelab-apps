@@ -1,0 +1,4 @@
+global:
+  externalVaultAddr: "https://vault.vault-system.svc:8200"
+injector:
+  enabled: true

@@ -1,0 +1,20 @@
+tunnel: homelab
+credentials-file: /vault/secrets/credentials.json
+metrics: 0.0.0.0:2000
+no-autoupdate: true
+
+warp-routing:
+  enabled: true
+
+ingress:
+  - hostname: hello.sudoceo.com
+    service: hello_world
+  - hostname: "*.sudoceo.com"
+    service: https://gateway-traefik-external.traefik-external.svc.cluster.local:443
+    originRequest:
+      originServerName: "*.sudoceo.com"
+  - hostname: sudoceo.com
+    service: https://gateway-traefik-external.traefik-external.svc.cluster.local:443
+    originRequest:
+      originServerName: sudoceo.com
+  - service: http_status:404

@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: databases
+  namespace: argocd
+  labels:
+    com.sudoceo: databases
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/sud0ce0/homelab-apps.git
+        revision: HEAD
+        directories:
+          - path: infra/databases/*
+  template:
+    metadata:
+      name: "{{ path.basename }}"
+      labels:
+        com.sudoceo: databases
+    spec:
+      project: databases
+      source:
+        plugin:
+          name: kustomize-build-with-helm
+        repoURL: https://github.com/sud0ce0/homelab-apps.git
+        targetRevision: HEAD
+        path: "{{ path }}"
+      destination:
+        name: in-cluster
+        namespace: argocd
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+        syncOptions:
+          - ServerSideApply=true

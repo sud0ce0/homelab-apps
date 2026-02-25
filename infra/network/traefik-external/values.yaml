@@ -1,0 +1,120 @@
+deployment:
+  replicas: 1
+
+providers:
+  kubernetesCRD:
+    enabled: false
+
+  kubernetesIngress:
+    enabled: false
+
+  kubernetesGateway:
+    enabled: true
+    experimentalChannel: true
+
+gatewayClass:
+  enabled: true
+  name: "traefik-external"
+
+gateway:
+  enabled: true
+  name: "gateway-traefik-external"
+  listeners:
+    http:
+      port: 8080
+      protocol: HTTP
+      namespacePolicy:
+        from: All
+    https-wildcard:
+      port: 8443
+      protocol: HTTPS
+      hostname: "*.sudoceo.com"
+      namespacePolicy:
+        from: All
+      certificateRefs:
+        - kind: Secret
+          name: gateway-cert
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: gateway-cert
+    https-root:
+      port: 8443
+      protocol: HTTPS
+      hostname: "sudoceo.com"
+      namespacePolicy:
+        from: All
+      certificateRefs:
+        - kind: Secret
+          name: gateway-cert
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: gateway-cert
+
+ports:
+  web:
+    port: 8000
+    expose:
+      default: true
+    exposedPort: 80
+
+  websecure:
+    port: 8443
+    expose:
+      default: true
+    exposedPort: 443
+    allowACMEByPass: false
+    http3:
+      enabled: true
+
+  traefik:
+    port: 8080
+    expose:
+      default: false
+    exposedPort: 8080
+    protocol: TCP
+
+  metrics:
+    port: 9187
+    expose:
+      default: true
+    exposedPort: 9187
+
+service:
+  enabled: true
+  type: ClusterIP
+
+logs:
+  general:
+    level: "INFO"
+  access:
+    enabled: true
+    format: "json"
+    noColor: true
+    timezone: "UTC"
+    addInternals: false
+    fields:
+      general:
+        defaultmode: redact
+      headers:
+        defaultmode: redact
+
+metrics:
+  addInternals: true
+  prometheus:
+    entryPoint: metrics
+    service:
+      enabled: true
+      labels: 
+        release: kube-prometheus-stack
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: kube-prometheus-stack
+      apiVersion: "monitoring.coreos.com/v1"
+
+additionalArguments: 
+  - "--serversTransport.insecureSkipVerify=true"

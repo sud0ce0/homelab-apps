@@ -1,0 +1,16 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: argocd-oauth-client-data
+  namespace: argocd
+spec:
+  type: kv-v2
+  mount: kv
+  path: infra/controllers/argocd/oauth
+  destination:
+    name: argocd-oauth-client-data
+    create: true
+    labels:
+      app.kubernetes.io/part-of: argocd
+  refreshAfter: 30s
+  vaultAuthRef: argocd-auth

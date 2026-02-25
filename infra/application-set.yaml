@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: infrastructure
+  namespace: argocd
+  labels:
+    com.sudoceo: infrastructure
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/sud0ce0/homelab-apps.git
+        revision: HEAD
+        directories:
+          - path: infra/*
+  template:
+    metadata:
+      name: "{{ path.basename }}"
+      labels:
+        com.sudoceo: infrastructure
+    spec:
+      project: infrastructure
+      source:
+        repoURL: https://github.com/sud0ce0/homelab-apps.git
+        targetRevision: HEAD
+        path: "{{ path }}"
+      destination:
+        name: in-cluster
+        namespace: argocd
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true

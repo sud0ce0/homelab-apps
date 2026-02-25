@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: security
+  namespace: argocd
+spec:
+  sourceRepos:
+    - "https://github.com/sud0ce0/homelab-apps.git"
+  destinations:
+    - namespace: "argocd"
+      server: "*"
+    - namespace: "authentik"
+      server: "*"
+    - namespace: "vault-system"
+      server: "*"
+    - namespace: "vault-agent-injector"
+      server: "*"
+    - namespace: "vault-secrets-operator"
+      server: "*"
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"

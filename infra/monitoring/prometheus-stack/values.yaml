@@ -1,0 +1,224 @@
+crds:
+  upgradeJob:
+    enabled: true
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 65534
+      allowPrivilegeEscalation: false
+      seccompProfile:
+        type: RuntimeDefault
+
+prometheus:
+  prometheusSpec:
+    replicas: 1
+
+    resources:
+      requests:
+        cpu: 300m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 768Mi
+
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+
+    retention: 7d
+    retentionSize: 5GB
+
+    scrapeInterval: 60s
+    evaluationInterval: 60s
+
+    query:
+      timeout: 1m
+
+    enableAdminAPI: false
+
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      runAsGroup: 2000
+      fsGroup: 2000
+      seccompProfile:
+        type: RuntimeDefault
+
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop: ["ALL"]
+
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
+
+alertmanager:
+  alertmanagerSpec:
+    replicas: 1
+
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
+
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 2Gi
+
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      runAsGroup: 2000
+      fsGroup: 2000
+      seccompProfile:
+        type: RuntimeDefault
+
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop: ["ALL"]
+
+grafana:
+  replicas: 1
+  grafana.ini:
+    server:
+      domain: sudoceo.com
+      root_url: https://grafana.sudoceo.com
+    security:
+      disable_initial_admin_creation: true
+    auth:
+        disable_login_form: true
+        oauth_auto_login: true
+        signout_redirect_url: "https://idm.sudoceo.com/application/o/grafana/end-session/"
+    auth.anonymous:
+      enabled: false
+    auth.generic_oauth:
+        name: authentik
+        enabled: true
+        allow_sign_up: true
+        scopes: "openid profile email"
+        login_attribute_path: preferred_username
+        auth_url: "https://idm.sudoceo.com/application/o/authorize/"
+        token_url: "https://idm.sudoceo.com/application/o/token/"
+        api_url: "https://idm.sudoceo.com/application/o/userinfo/"
+        role_attribute_path: contains(groups, 'Grafana Admins') && 'Admin' || contains(groups, 'Grafana Editors') && 'Editor' || 'Viewer'
+
+  defaultDashboardsEnabled: false
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
+
+  persistence:
+    enabled: true
+    storageClassName: longhorn
+    accessModes: ["ReadWriteOnce"]
+    size: 2Gi
+
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 472
+    fsGroup: 472
+
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop: ["ALL"]
+  
+  envValueFrom:
+    GF_AUTH_GENERIC_OAUTH_CLIENT_ID:
+      secretKeyRef:
+        name: gf-oauth-client-data
+        key: client_id
+    GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET:
+      secretKeyRef:
+        name: gf-oauth-client-data
+        key: client_secret
+
+
+prometheusOperator:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65534
+    seccompProfile:
+      type: RuntimeDefault
+
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+
+kubeStateMetrics:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65534
+
+  podAnnotations: {}
+
+nodeExporter:
+  enabled: true
+  operatingSystems:
+    linux:
+      enabled: true
+    aix:
+      enabled: false
+    darwin:
+      enabled: false
+  resources:
+    requests:
+      cpu: 25m
+      memory: 32Mi
+    limits:
+      cpu: 50m
+      memory: 64Mi
+
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65534
+
+podDisruptionBudget:
+  enabled: true
+  maxUnavailable: 1

@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: storage
+  namespace: argocd
+  labels:
+    com.sudoceo: storage
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/sud0ce0/homelab-apps.git
+        revision: HEAD
+        directories:
+          - path: infra/storage/*
+  template:
+    metadata:
+      name: "{{ path.basename }}"
+      labels:
+        com.sudoceo: storage
+    spec:
+      project: storage
+      source:
+        plugin:
+          name: kustomize-build-with-helm
+        repoURL: https://github.com/sud0ce0/homelab-apps.git
+        targetRevision: HEAD
+        path: "{{ path }}"
+      destination:
+        name: in-cluster
+        namespace: argocd
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true

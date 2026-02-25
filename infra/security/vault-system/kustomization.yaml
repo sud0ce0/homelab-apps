@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: vault-system
+
+resources:
+  - ns.yaml
+  - default-vault.yaml
+  - http-route.yaml
+  - https://github.com/bank-vaults/vault-operator/deploy/rbac
+  - cert.yaml
+
+helmCharts:
+  - name: vault-operator
+    repo: oci://ghcr.io/bank-vaults/helm-charts
+    releaseName: vault-operator
+    namespace: vault-system
+    version: "1.23.4"
+    valuesFile: values.yaml
