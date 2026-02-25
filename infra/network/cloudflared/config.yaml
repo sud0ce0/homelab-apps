@@ -10,11 +10,11 @@ ingress:
   - hostname: hello.sudoceo.com
     service: hello_world
   - hostname: "*.sudoceo.com"
-    service: https://gateway-traefik-external.traefik-external.svc.cluster.local:443
+    service: https://traefik-external.traefik-external.svc.cluster.local:443
     originRequest:
       originServerName: "*.sudoceo.com"
   - hostname: sudoceo.com
-    service: https://gateway-traefik-external.traefik-external.svc.cluster.local:443
+    service: https://traefik-external.traefik-external.svc.cluster.local:443
     originRequest:
       originServerName: sudoceo.com
   - service: http_status:404
