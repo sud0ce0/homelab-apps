@@ -8,6 +8,9 @@ spec:
     - name: gateway-traefik-internal
       namespace: traefik-internal
       sectionName: https-wildcard
+    - name: gateway-traefik-external
+      namespace: traefik-external
+      sectionName: https-wildcard
   hostnames:
     - "idm.sudoceo.com"
   rules:
