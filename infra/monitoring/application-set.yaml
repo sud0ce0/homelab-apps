@@ -1,24 +1,24 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: network
+  name: monitoring
   namespace: argocd
   labels:
-    com.sudoceo: network
+    com.sudoceo: monitoring
 spec:
   generators:
     - git:
         repoURL: https://github.com/sud0ce0/homelab-apps.git
         revision: HEAD
         directories:
-          - path: infra/network/*
+          - path: infra/monitoring/*
   template:
     metadata:
       name: "{{ path.basename }}"
       labels:
-        com.sudoceo: network
+        com.sudoceo: monitoring
     spec:
-      project: network
+      project: monitoring
       source:
         plugin:
           name: kustomize-build-with-helm
