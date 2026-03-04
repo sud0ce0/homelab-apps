@@ -11,6 +11,8 @@ spec:
       server: "*"
     - namespace: "prometheus-stack"
       server: "*"
+    - namespace: "kube-system"
+      server: "*"
   clusterResourceWhitelist:
     - group: "*"
       kind: "*"
