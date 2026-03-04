@@ -4,23 +4,23 @@ global:
     vault.hashicorp.com/tls-secret: "selfsigned-cert-tls"
     vault.hashicorp.com/ca-cert: "/vault/tls/ca.crt"
     vault.hashicorp.com/role: "authentik"
-    vault.hashicorp.com/agent-inject-secret-secret_key.txt: 'kv/data/infra/security/authentik/secret_key'
+    vault.hashicorp.com/agent-inject-secret-secret_key.txt: 'prod_k8s/data/infra/security/authentik/secret_key'
     vault.hashicorp.com/agent-inject-template-secret_key.txt: |
-      {{- with secret "kv/data/infra/security/authentik/secret_key" -}}
+      {{- with secret "prod_k8s/data/infra/security/authentik/secret_key" -}}
       {{ .Data.data.key }}
       {{- end -}}
-    vault.hashicorp.com/agent-inject-secret-db_password.txt: 'kv/data/infra/security/authentik/db_creds'
+    vault.hashicorp.com/agent-inject-secret-db_password.txt: 'prod_k8s/data/infra/security/authentik/db_creds'
     vault.hashicorp.com/agent-inject-template-db_password.txt: |
-      {{- with secret "kv/data/infra/security/authentik/db_creds" -}}
+      {{- with secret "prod_k8s/data/infra/security/authentik/db_creds" -}}
       {{ .Data.data.password }}
       {{- end -}}
-    vault.hashicorp.com/agent-inject-secret-smtp_creds.txt: 'kv/data/infra/security/authentik/smtp_creds'
+    vault.hashicorp.com/agent-inject-secret-smtp_creds.txt: 'prod_k8s/data/infra/security/authentik/smtp_creds'
     vault.hashicorp.com/agent-inject-template-smtp_username.txt: |
-      {{- with secret "kv/data/infra/security/authentik/smtp_creds" -}}
+      {{- with secret "prod_k8s/data/infra/security/authentik/smtp_creds" -}}
       {{ .Data.data.username }}
       {{- end -}}
     vault.hashicorp.com/agent-inject-template-smtp_password.txt: |
-      {{- with secret "kv/data/infra/security/authentik/smtp_creds" -}}
+      {{- with secret "prod_k8s/data/infra/security/authentik/smtp_creds" -}}
       {{ .Data.data.password }}
       {{- end -}}
 authentik:

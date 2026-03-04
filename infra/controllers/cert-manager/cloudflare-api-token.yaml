@@ -5,7 +5,7 @@ metadata:
   namespace: cert-manager
 spec:
   type: kv-v2
-  mount: kv
+  mount: prod_k8s
   path: infra/controllers/cert-manager/cloudflare-api-token
   destination:
     name: cloudflare-api-token

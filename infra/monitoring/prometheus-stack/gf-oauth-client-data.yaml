@@ -5,7 +5,7 @@ metadata:
   namespace: prometheus-stack
 spec:
   type: kv-v2
-  mount: kv
+  mount: prod_k8s
   path: infra/monitoring/grafana/oauth
   destination:
     name: gf-oauth-client-data
