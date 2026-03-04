@@ -7,12 +7,10 @@ warp-routing:
   enabled: true
 
 ingress:
-  - hostname: hello.sudoceo.com
-    service: hello_world
-  - hostname: "*.sudoceo.com"
+  - hostname: "idm.sudoceo.com"
     service: https://traefik-external.traefik-external.svc.cluster.local:443
     originRequest:
-      originServerName: "*.sudoceo.com"
+      originServerName: "idm.sudoceo.com"
   - hostname: sudoceo.com
     service: https://traefik-external.traefik-external.svc.cluster.local:443
     originRequest:
