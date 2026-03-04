@@ -8,6 +8,8 @@ resources:
   - grpc-route.yaml
   - argocd-auth.yaml
   - argocd-oauth-client-data.yaml
+  - argocd-server-vpa.yaml
+  - argocd-reposerver-vpa.yaml
 
 helmCharts:
   - name: argo-cd

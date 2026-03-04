@@ -5,6 +5,7 @@ namespace: dragonfly-system
 resources:
   - ns.yaml
   - dragonfly-db.yaml
+  - dragonfly-vpa.yaml
 
 helmCharts:
   - name: dragonfly-operator

@@ -46,12 +46,17 @@ controller:
     enabled: true
     serviceMonitor:
       enabled: true
-  resources:
-    requests:
-      cpu: 100m
-      memory: 700Mi
-    limits:
-      memory: 4Gi
+  resources: {}
+  vpa:
+    enabled: true
+    updateMode: "Auto"
+    containerPolicy:
+      minAllowed:
+        cpu: 250m
+        memory: 512Mi
+      maxAllowed:
+        cpu: 2000m
+        memory: 4096Mi
 
 dex:
   enabled: true
@@ -73,12 +78,7 @@ server:
     enabled: true
     serviceMonitor:
       enabled: true
-  resources:
-    requests:
-      cpu: 50m
-      memory: 64Mi
-    limits:
-      memory: 1Gi
+  resources: {}
 
 repoServer:
   metrics:
@@ -93,12 +93,7 @@ repoServer:
         name: argocd-cmp-cm
     - name: cmp-tmp
       emptyDir: { }
-  resources:
-    requests:
-      cpu: 100m
-      memory: 256Mi
-    limits:
-      memory: 2Gi
+  resources: {}
   extraContainers:
     - name: kustomize-build-with-helm
       command:

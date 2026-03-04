@@ -7,6 +7,9 @@ resources:
   - selfsigned-issuer.yaml
   - cert-manager-auth.yaml
   - cloudflare-api-token.yaml
+  - cert-manager-vpa.yaml
+  - cert-manager-webhook-vpa.yaml
+  - cert-manager-cainjector-vpa.yaml
 
 helmCharts:
   - name: cert-manager

@@ -9,6 +9,8 @@ resources:
   - http-route.yaml
   - vault-auth.yaml
   - static-secret.yaml
+  - authentik-server-vpa.yaml
+  - authentik-worker-vpa.yaml
 
 helmCharts:
   - name: authentik

@@ -164,11 +164,14 @@ grafana:
 
 
 prometheusOperator:
-  resources:
-    requests:
-      cpu: 50m
-      memory: 64Mi
-    limits:
+  resources: {}
+  verticalPodAutoscaler:
+    enabled: true
+    controlledResources: ["cpu", "memory"]
+    maxAllowed:
+      cpu: 1000m
+      memory: 2048Mi
+    minAllowed:
       cpu: 100m
       memory: 128Mi
 
