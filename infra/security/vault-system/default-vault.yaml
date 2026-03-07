@@ -68,6 +68,7 @@ spec:
   serviceRegistrationEnabled: true
 
   vaultContainerSpec:
+    name: vault
     securityContext:
       capabilities:
         add: ["IPC_LOCK"]
